@@ -1,0 +1,66 @@
+# 修改
+
+- 根据主键修改model，返回影响行数
+```csharp
+    var person = new Person { Id = 23, Name = "update name", Age = 28 };
+    var flag = db.Update(person);
+    //or 指定修改列
+    var flag = db.Update(person,"Name","Age");
+```
+
+- 根据条件修改指定列
+```csharp
+    var fields = DictBuilder.Assign("name", "updateName").Assign("$age", "age+1");
+    var ps = DictBuilder.Assign("id", 23);
+    var flag = db.Update<Person>(fields, "id=@id", ps);
+    //or
+    var flag = db.Update("person",fields, "id=@id", ps);
+```
+> fields中 $age列表示不参数化，直接使用后面的值，如上会生成 update person set name=@name,age=age+1 where id=23
+
+- 根据主键修改指定列
+```csharp
+    var fields = DictBuilder.Assign("name", "updateName").Assign("$age", "age+1");
+    var flag = db.UpdateById<Person>(fields, 23);
+    //or
+    var flag = db.UpdateById("person", fields, 23);
+```
+
+- 根据某列修改指定列
+```csharp
+    var fields = DictBuilder.Assign("name", "updateName").Assign("$age", "age+1");
+    var flag = db.UpdateById<Person>(fields,"loogn", "Name");
+    //or
+    var flag = db.UpdateById("person", fields, "loogn", "Name");
+```
+
+- 根据主键修改某一列
+```csharp
+    var flag = db.UpdateFieldById<Person>("name","update name",1);
+    //update person set name=@name where id=1; @name='update name'
+```
+- 根据某列修改某一列
+```csharp
+    var flag = db.UpdateFieldById<Person>("name","update name",23,"age");
+    //update person set name=@name where age=23; @name='update name'
+```
+- 匿名对象修改,表和匿名对象要包含ID列
+```csharp
+    var flag = db.UpdateAnonymous("person", new {Name="new name",Id=2});
+    //or 
+    var flag = db.UpdateAnonymous<Person>(new {Name="new name",Id=2});
+    //update person set Name=@name where Id=2 ; @name ="new name"
+```
+
+- 批量修改model
+```csharp
+    var list = new List<Person>()
+    {
+          new Person{ Id=1, Name="new name1"},
+          new Person{ Id=2, Name="new name2"}
+    };
+    var flag = db.UpdateAll(list);
+```
+
+
+

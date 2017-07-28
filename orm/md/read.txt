@@ -1,0 +1,41 @@
+# 查询
+
+- 根据id查询一条数据
+```csharp
+    var person=db.SingleById<Person>(1);
+    //or
+    var person=db.SingleById<Person>(1,"_id");
+```
+- 根据条件查询一条数据
+```csharp
+    var person=db.Single<Person>("age>10 and sex=1");
+    //select * from person where age>10 and sex=1
+
+    var person=db.Single<Person>("age>10 and Name=@name", DictBuilder.Assign("name", "abc"));
+    //select * from person where age>10 and Name=@name; @name='abc'
+
+    var person=db.Single<Person>("select ID,Name from Person where age>10 and sex=1");
+    //原始sql
+    var person=db.Single<Person>("select ID,Name from Person where age>10 and name=@name", DictBuilder.Assign("name", "abc"));
+    //原始sql带参数
+```
+
+- 参数化查询语句
+```csharp
+    var person=db.SingleFmt<Person>("select ID,Name from Person where age>{0} and sex={1}",10,1);
+```
+- 根据单个查询条件查询单条数据
+```csharp
+    var person= db.SingleWhere<Person>("id",23);
+```
+
+- 使用字典条件查询单条数据
+```csharp
+    var person= db.SingleWhere<Person>(DictBuilder.Assign("name","loogn").Assign("age",23));
+```
+- 使用匿名对象作为条件查询单条数据
+```csharp
+    var person= db.SingleWhere<Person>(new{ Name = "loogn", Age=23});
+```
+
+

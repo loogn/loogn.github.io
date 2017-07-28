@@ -1,0 +1,35 @@
+# Model
+
+一个纯净的Model  
+ ```csharp
+    public class Person
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime UpdateTime { get; set; }
+        public DateTime AddTime { get; set; }
+    }
+ ```
+
+一个带有Attribute的Model
+```csharp
+    //指定表明
+    [OrmLiteTable("t_person")]
+    public class Person
+    {
+        //整体修改时使用主键，如果自增可以使用InsertIgnore指定插入时忽略
+        [OrmLiteField(IsPrimaryKey = true, InsertIgnore = true)] 
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime UpdateTime { get; set; }
+
+        //整体修改时忽略
+        [OrmLiteField(UpdateIgnore = true)] 
+        public DateTime AddTime { get; set; }
+
+        //整体修改，添加时忽略
+        [OrmLiteField(Ignore = true)] 
+        public List<string> SomeAttrs { get; set; }
+    }
+```
+

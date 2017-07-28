@@ -1,2 +1,46 @@
-# start
- 
+# Getting Started
+
+一、 引入Loogn.OrmLite
+```
+    > Install-Package Loogn.OrmLite
+```
+二、引入名称空间
+```csharp
+    using Loogn.OrmLite;
+```
+三、开始使用
+ ```csharp
+    using (var db = new SqlConnection("server=.;uid=sa;pwd=sa;database=test"))
+    {
+        var flag = db.Insert(new Person { Id = 23 });
+        if (flag > 0)
+        {
+            var person = db.SingleById<Person>(23);
+        }
+    }
+ ```
+
+
+一般情况下可以把连接对象的创建分装起来：
+```csharp
+    public static class DB
+    {
+        public static IDbConnection Open()
+        {
+            return new SqlConnection("server=.;uid=sa;pwd=sa;database=test");
+        }
+
+        //public static IDbConnection OpenOther()
+        //{
+        //    return new SqlConnection("server=.;uid=sa;pwd=sa;database=other");
+        //}
+    }
+```
+然后使用起来就更简单了：
+```csharp
+    using (var db = DB.Open())
+    {
+        // do something with db
+    }
+```
+

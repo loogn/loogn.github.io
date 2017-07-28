@@ -8,21 +8,57 @@
     <title>ORMLite</title>
     <script src="/js/marked.min.js"></script>
     <script src="/js/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+     <link href="/css/github-markdown.css" rel="stylesheet"> 
+      <!-- <link href="/css/hl/monokai-sublime.css" rel="stylesheet">   -->
+    <!-- <link href="/css/hl/dark.css" rel="stylesheet"> -->
+      <link href="/css/hl/vs2015.css" rel="stylesheet">  
+    <link href="/css/site.css" rel="stylesheet">
+
 </head>
 
-<body>
-    <a href="#intro">intro</a>| <a href="#start">start</a>
-    <hr/>
-    <div id="content"></div>
+<body style="padding-top:50px;">
 
+    <div id="menu">
+    </div>
 
     <script>
+        var pages = [
+            { title: 'Gatting Start', hash: 'start' },
+            { title: '模型', hash: 'model' },
+            { title: '插入', hash: 'create' },
+            { title: '修改', hash: 'update' },
+            { title: '查询', hash: 'read' },
+        ];
+        var arr = [];
+        for (var index = 0; index < pages.length; index++) {
+            var element = pages[index];
+            arr.push('<a href="#' + element.hash + '">' + element.title + '</a>');
+        }
+        $("#menu").html(arr.join(" | "));
+    </script>
+    <div id="content" class='markdown-body' style="padding:20px 20px 80px 20px;"></div>
+    <script>
         $(window).bind('hashchange', loadmd);
+        var opts = {
+            highlight: function (code, lang) {
+                var value = hljs.highlightAuto(code, [lang]).value;
+                return '<div class="hljs">' + value + "</div>";
+            }
+        };
+
         function loadmd() {
-            var hash = location.hash || '#intro';
+            var hash = location.hash || '#start';
             hash = hash.replace('#', '');
+            for (var index = 0; index < pages.length; index++) {
+                var element = pages[index];
+                if (element.hash == hash) {
+                    document.title = element.title + "- Loogn.OrmLite";
+                    break;
+                }
+            }
             $.get("md/" + hash + ".txt", function (data) {
-                $("#content").html(marked(data));
+                $("#content").html(marked(data, opts));
             });
         }
         loadmd();

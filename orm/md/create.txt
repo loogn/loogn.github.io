@@ -1,0 +1,50 @@
+# 插入
+
+- 使用model插入，返回影响行数
+```csharp
+    var person = new Person { Name = "loogn" };
+    var flag = db.Insert(person);
+```
+
+- 使用model插入，返回自增列值（long）
+```csharp
+    var person = new Person { Name = "loogn" };
+    var autoId = db.Insert(person,true);
+```
+- 使用匿名对象插入，返回影响行数
+```csharp
+    var flag = db.Insert("Person",new { Name="loogn" });
+```
+- 使用匿名对象插入，返回自增列值（long）
+```csharp
+    var autoId = db.Insert("Person",new { Name="loogn" },true);
+```
+- 使用字典插入，返回影响行数
+```csharp
+    var flag = db.Insert("Person",DictBuilder.Assign("Name","loogn").Assign("Age",23));
+```
+- 使用字典插入，返回自增列值（long）
+```csharp
+    var autoId = db.Insert("Person",DictBuilder.Assign("Name","loogn").Assign("Age",23),true);
+```
+> DictBuilder生成的是 Dictionary<string, object>的子类
+
+- 使用模型批量插入
+```csharp
+    var list = new List<Person>()
+    {
+         new Person{ Name="p1"},
+         new Person{ Name="p2"}
+    };
+    var boolFlag = db.InsertAll(list);
+```
+- 使用匿名对象批量插入
+```csharp
+    var list = new List<object>()
+    {
+            new { Name="p1"},
+            new { Name="p2"}
+    };
+    var boolFlag = db.InsertAll("Person",list);
+```
+
