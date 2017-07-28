@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ORMLite</title>
-    <script src="/js/marked.min.js"></script>
-    <script src="/js/jquery.min.js"></script>
+    <!-- <script src="/js/marked.min.js"></script> -->
+    <!-- <script src="/js/jquery.min.js"></script> -->
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/marked/0.3.6/marked.min.js"></script>
     <script src="http://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-     <link href="/css/github-markdown.css" rel="stylesheet"> 
-      <!-- <link href="/css/hl/monokai-sublime.css" rel="stylesheet">   -->
-    <!-- <link href="/css/hl/dark.css" rel="stylesheet"> -->
-      <link href="/css/hl/vs2015.css" rel="stylesheet">  
+    <link href="/css/github-markdown.css" rel="stylesheet">
+    <link href="/css/hl/vs2015.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
 
 </head>
@@ -20,24 +20,29 @@
 <body style="padding-top:50px;">
 
     <div id="menu">
+        <a href="/">Home</a>
     </div>
 
     <script>
         var pages = [
-            { title: 'Gatting Start', hash: 'start' },
+            { title: '起步', hash: 'start' },
             { title: '模型', hash: 'model' },
             { title: '插入', hash: 'create' },
             { title: '修改', hash: 'update' },
             { title: '查询', hash: 'read' },
+            { title: '查询2', hash: 'read2' },
+            { title: '删除', hash: 'delete' },
+            { title: '其他', hash: 'other' },
         ];
         var arr = [];
         for (var index = 0; index < pages.length; index++) {
             var element = pages[index];
             arr.push('<a href="#' + element.hash + '">' + element.title + '</a>');
         }
-        $("#menu").html(arr.join(" | "));
+        $("#menu").append(arr.join(" -"));
     </script>
-    <div id="content" class='markdown-body' style="padding:20px 20px 80px 20px;"></div>
+    <div id="content" class='markdown-body'>
+    </div>
     <script>
         $(window).bind('hashchange', loadmd);
         var opts = {
@@ -53,13 +58,25 @@
             for (var index = 0; index < pages.length; index++) {
                 var element = pages[index];
                 if (element.hash == hash) {
+                    if (element.body) {
+                        $("#content").html(element.body);
+                        $("body").scrollTop(0);
+                    } else {
+                        $.get("md/" + hash + ".txt", function (data) {
+                            element.body = marked(data, opts);
+                            $("#content").html(element.body);
+                            $("body").scrollTop(0);
+                        });
+                    }
+
                     document.title = element.title + "- Loogn.OrmLite";
                     break;
                 }
             }
-            $.get("md/" + hash + ".txt", function (data) {
-                $("#content").html(marked(data, opts));
-            });
+            // $.get("md/" + hash + ".txt", function (data) {
+            //     $("#content").html(marked(data, opts));
+            //     $("body").scrollTop(0);
+            // });
         }
         loadmd();
     </script>

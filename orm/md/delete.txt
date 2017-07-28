@@ -1,0 +1,30 @@
+# 删除
+
+- 根据id删除
+```csharp
+    var flag = db.DeleteById<Person>(2);
+    // delete from person where id=2;
+    var flag = db.DeleteById<Person>("123", "userId");
+    // delete from person where userid='123';
+    var flag = db.DeleteByIds<Person>(new int[] { 1, 2, 3 });
+    // delete from person where id in (1,2,3);
+    var flag = db.DeleteByIds<Person>(new string[] { "111", "222", "333" }, "userId");
+    //delete from person where userId in ("111", "222", "333")
+```
+
+- 根据字段删除
+```csharp
+    var flag = db.DeleteWhere<Person>("name","loogn");
+    // delete from person where name=@name; @name="loogn"
+
+    var flag = db.DeleteWhere<Person>(DictBuilder.Assign("age",23).Assign("name","loogn"));
+    var flag = db.DeleteWhere<Person>(new { age=23, name="loogn"});
+    // delete from person where age=@age and name=@name; @age=23, @name="loogn";
+```
+
+- 根据条件删除
+```csharp
+    var flag = db.Delete("delete from person where id=@id",DictBuilder.Assign("id",23));
+    var flag = db.Delete<Person>();
+    // delete from person;
+```

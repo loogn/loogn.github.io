@@ -38,4 +38,56 @@
     var person= db.SingleWhere<Person>(new{ Name = "loogn", Age=23});
 ```
 
+- 查询全部
+```csharp
+    var list=db.Select<Person>();
+```
+- in查询
+```csharp
+    var list=db.SelectByIds<Person>(new int[] { 1, 2, 3 });
+    //select * from person where id in (1,2,3);
+    var list=db.SelectByIds<Person>(new string[] { "1", "2", "3" },"userId");
+    //select * from person where userId in ("1","2","3");
+    var list=db.SelectByIds<Person>(new string[] { "1", "2", "3" },"userId","id,name");
+    //select id,name from person where userId in ("1","2","3");
+```
+- 返回多个结果集
+```csharp
+    var cmds = new MutipleCmd[] {
+            new MutipleCmd{ CmdText="select * from person"},
+            new MutipleCmd{ CmdText="select count(0) from person where id=@id",Params=DictBuilder.Assign("id",23)},
+            new MutipleCmd{ CmdText="select top 1 * from User where age>23"},
+    };
+    using (var fetcher = db.SelectMutipleResult(cmds))
+    {
+        var personList = fetcher.FetchList<Person>();   //对应第一个命令
+        var personCount = fetcher.FetchScalar<int>();   //对应第二个命令
+        var user = fetcher.FetchObject<User>();         //对应第三个命令
+    }
+```
+> 其他Select和上面Single方法类似
+
+- 分页查询
+```csharp
+    var pageResult = db.SelectPage<Person>(new OrmLitePageFactor
+    {
+        Conditions = "id>2 and age=@age",
+        Fields = "ID,Name",
+        OrderBy = "ID desc",
+        PageIndex = 1,
+        PageSize = 10,
+        Params = DictBuilder.Assign("age", 23)
+    });
+    //也可以连接查询
+    var pageResult = db.SelectPage<Person>(new OrmLitePageFactor
+    {
+        Conditions = "p.id>2 and p.age=@age",
+        Fields = "p.*,t.Name as TypeName",
+        OrderBy = "p.ID desc",
+        PageIndex = 1,
+        PageSize = 10,
+        Params = DictBuilder.Assign("age", 23),
+        TableName="Person p inner join Type t on p.Typeid=t.id"
+    });
+```
 

@@ -1,0 +1,49 @@
+# 查询2
+
+- 查询数量
+```csharp
+    long count = db.Count<Person>();
+    // select count(0) from Person;
+    long count = db.Count<Person>("id>@id", DictBuilder.Assign("id", 1));
+    long count = db.Count<Person>("id>@id", new { id=1});
+    // select count(0) from person where id=@id; @id=1
+
+    long count = db.CountWhere<Person>("age", 1);
+    // select count(0) from Person where age=@age ; @age=1
+
+    long count = db.CountWhere<Person>(DictBuilder.Assign("age", 23).Assign("name", "loogn"));
+    long count = db.CountWhere<Person>(new { age=23, name="loogn" });
+    // select count(0) from person where age=@age and name=@name; @age=23,@name="loogn";
+```
+
+- 查询最大值
+```csharp
+    long maxid= db.MaxID<long>("person");
+    // select max(id) from person 
+
+    string maxid= db.MaxID<string>("person","userid");
+    // select max(userid) from person 
+```
+- 查询首行首列Scalar
+```csharp
+    int id= db.Scalar<int>("select id from Person where id=23")
+    string name= db.Scalar<string>("select name from Person where age>@age",new { age=23})
+```
+
+- 查询单列值（主要是返回值）
+```csharp
+    List<string> nameList = db.Column<string>("select name from person where age>@age", DictBuilder.Assign("age", 23));
+    HashSet<string> nameSet = db.ColumnDistinct<string>("select distinct(name) from person");
+```
+
+- 查询字典值（主要是返回值）
+```csharp
+    Dictionary<int,string> typeDict = db.Dictionary<int,string>("select id,name from Type");
+    // id 和 name 一一对应的时候可以使用
+```
+
+- 查询一对多值（主要是返回值）
+```csharp
+    Dictionary<int, List<string>> lookUp = db.Lookup<int, string>("select userid,tagName from userTag");
+    // 一个userid对应多个tagName
+```
