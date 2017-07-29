@@ -2,7 +2,7 @@
 
 一、 引入Loogn.OrmLite
 ```
-    > Install-Package Loogn.OrmLite
+    PM> Install-Package Loogn.OrmLite
 ```
 二、引入名称空间
 ```csharp

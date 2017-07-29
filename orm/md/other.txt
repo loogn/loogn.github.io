@@ -41,3 +41,29 @@
 ```
 > 使用连接对象的BeginTransaction获取事务对象，在事务对象上执行方法即可;    
 > 事务对象上有和连接对象相同发方法;
+
+
+- 使用mysql数据库(sqlite步骤一样)
+    1. 引入 Loogn.OrmLite.MySql.dll
+    ```
+    PM> Install-Package Loogn.OrmLite.MySql
+    ```
+
+    2. 在程序启动时注册mysql命令提供程序
+    ```csharp
+    OrmLite.RegisterProvider(MySqlCommandDialectProvider.Instance);
+    ```
+    3. 实例化MySqlConnection进行使用
+    ```csharp
+    using (var db = new MySqlConnection("server=.;uid=root;pwd=root;database=test"))
+    {
+        // do what you like...
+    }
+    ```
+
+
+- 全局配置
+
+OrmLite.DefaultKeyName属性配置默认主键名，默认是 "ID";
+
+OrmLite.UpdateIgnoreFields属性全局配置整体修改时忽略的字段名，默认是：["AddTime","AddDate"],可根据项目增减
