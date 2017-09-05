@@ -6,17 +6,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Loogn</title>
+    <style type="text/css">
+        table.gridtable {
+            font-family: verdana, arial, sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+            width: 800px;
+        }
+
+        table.gridtable th {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #dedede;
+        }
+
+        table.gridtable td {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+        }
+
+        table.gridtable caption {
+            font-size: 18px;
+            padding: 10px auto;
+        }
+    </style>
+
 </head>
 
 <body>
     <div id="content">
         <h1><a href="/orm">OrmLite</a></h1>
     </div>
-    <h2>性能对比</h2>
-    <p><a href="https://git.oschina.net/loogn/Loogn.OrmLite" target="_blank">测试源码</a></p>
-    <img src="img/test0.png" />
-    <img src="img/test1.png" />
-    <img src="img/test2.png" />
+    <p><b> 性能对比</b> <a href="https://git.oschina.net/loogn/Loogn.OrmLite" target="_blank">测试源码</a> </p>
+
+    <p>
+        测试环境：<br/> 系统：Windows 10 企业版<br/> CPU：AMD Athlon(tm) II X4 641 Quad-Core Processor 2.80 GHz<br/> Mem：8.00 GB<br/>        DB：SqlServer2014
+    </p>
+
+    <table class="gridtable">
+        <caption>一次查询20万条映射效率</caption>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Native</th>
+                <th>Loogn.OrmLite</th>
+                <th>ServiceStack.OrmLite</th>
+                <th>Dapper</th>
+                <th>EFSql</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>第一次</td>
+                <td>827ms</td>
+                <td>1,019ms</td>
+                <td>1,165ms</td>
+                <td>1,169ms</td>
+                <td>1,110ms</td>
+            </tr>
+            <tr>
+                <td>第二次</td>
+                <td>825ms</td>
+                <td>1,064ms</td>
+                <td>1,165ms</td>
+                <td>1,167ms</td>
+                <td>1,116ms</td>
+            </tr>
+            <tr>
+                <td>第三次</td>
+                <td>830ms</td>
+                <td>1,046ms</td>
+                <td>1,185ms</td>
+                <td>1,171ms</td>
+                <td>1,130ms</td>
+            </tr>
+        </tbody>
+    </table>
+    <br/> 
+    <table class="gridtable">
+        <caption>同一个连接，查询2000次，每次查询100条</caption>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Native</th>
+                <th>Loogn.OrmLite</th>
+                <th>ServiceStack.OrmLite</th>
+                <th>Dapper</th>
+                <th>EFSql</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>第一次</td>
+                <td>1,860ms</td>
+                <td>2,124ms</td>
+                <td>2,310ms</td>
+                <td>2,424ms</td>
+                <td>2,648ms</td>
+            </tr>
+            <tr>
+                <td>第二次</td>
+                <td>1,449ms</td>
+                <td>2,024ms</td>
+                <td>2,101ms</td>
+                <td>2,139ms</td>
+                <td>2,043ms</td>
+            </tr>
+            <tr>
+                <td>第三次</td>
+                <td>1,730ms</td>
+                <td>1,903ms</td>
+                <td>2,021ms</td>
+                <td>2,224ms</td>
+                <td>2,340ms</td>
+            </tr>
+        </tbody>
+    </table>
+    <br/> 
+
+    <table class="gridtable">
+        <caption>不同连接，查询1000次，每次查询100条</caption>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Native</th>
+                <th>Loogn.OrmLite</th>
+                <th>ServiceStack.OrmLite</th>
+                <th>Dapper</th>
+                <th>EFSql</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>第一次</td>
+                <td>900ms</td>
+                <td>1,042ms</td>
+                <td>1,159ms</td>
+                <td>1,193ms</td>
+                <td>1,172ms</td>
+            </tr>
+            <tr>
+                <td>第二次</td>
+                <td>936ms</td>
+                <td>981ms</td>
+                <td>1,096ms</td>
+                <td>1,074ms</td>
+                <td>1,374ms</td>
+            </tr>
+            <tr>
+                <td>第三次</td>
+                <td>928ms</td>
+                <td>981ms</td>
+                <td>1,232ms</td>
+                <td>1,107ms</td>
+                <td>1,509ms</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
 </body>
 
 </html>
