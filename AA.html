@@ -105,10 +105,8 @@
             this.name = name;
             this.count = count;
             this.cost = cost;
-            this.ok = false;
             this.money = 0;
         }
-
 
         function AA(groups) {
             var totalCount = 0;
@@ -142,10 +140,7 @@
             });
             outList.sort(function (a, b) {
                 return a.money < b.money;
-            })
-            // console.log("avg", avg);
-            // console.log("inlist", inList);
-            // console.log("outList", outList);
+            });
 
             var inId = 0, outId = 0;
             while (inId < inList.length && outId < outList.length) {
@@ -166,7 +161,6 @@
                 }
             }
             $("#result").html(lines.join("<br/>"));
-            console.log(lines);
         }
     </script>
 </body>
