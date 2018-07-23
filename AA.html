@@ -35,11 +35,38 @@
 <body>
     <br>
     <br>
+    <table style="width:100%;font-size: 28px;">
+        <tr>
+            <td>家庭</td>
+            <td>人数</td>
+            <td>花费</td>
+        </tr>
+    </table>
     <div id="divGroups">
         <div>
             <input class="txt" placeholder="家庭">
-            <input class="txt" placeholder="人数">
-            <input class="txt" placeholder="花费">
+            <input type="number" class="txt" placeholder="人数" value="1">
+            <input type="number" class="txt" placeholder="花费" value="0">
+        </div>
+        <div>
+            <input class="txt" placeholder="家庭">
+            <input type="number" class="txt" placeholder="人数" value="1">
+            <input type="number" class="txt" placeholder="花费" value="0">
+        </div>
+        <div>
+            <input class="txt" placeholder="家庭">
+            <input type="number" class="txt" placeholder="人数" value="1">
+            <input type="number" class="txt" placeholder="花费" value="0">
+        </div>
+        <div>
+            <input class="txt" placeholder="家庭">
+            <input type="number" class="txt" placeholder="人数" value="1">
+            <input type="number" class="txt" placeholder="花费" value="0">
+        </div>
+        <div>
+            <input class="txt" placeholder="家庭">
+            <input type="number" class="txt" placeholder="人数" value="1">
+            <input type="number" class="txt" placeholder="花费" value="0">
         </div>
     </div>
     <br>
@@ -56,7 +83,7 @@
     <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js "></script>
     <script>
         function addLine() {
-            $("#divGroups").append('<div><input class="txt" placeholder="家庭"> <input class="txt" placeholder="人数"> <input class="txt" placeholder="花费"></div>');
+            $("#divGroups").append('<div><input class="txt" placeholder="家庭"> <input type="number" class="txt" placeholder="人数" value="1"> <input type="number" class="txt" placeholder="花费" value="0"></div>');
         }
 
         function cacle() {
@@ -68,7 +95,7 @@
                 var c = inputs.eq(1).val();
                 var m = inputs.eq(2).val();
                 if (g.length > 0 && c.length > 0 && c > 0) {
-                    list.push(new Group(g, c, m || 0));
+                    list.push(new Group(g, parseInt(c), parseFloat(m || "0")));
                 }
             })
             AA(list);
@@ -86,12 +113,15 @@
         function AA(groups) {
             var totalCount = 0;
             var totalCost = 0;
+            var lines = [];
             for (var i = 0; i < groups.length; i++) {
                 var g = groups[i];
                 totalCount += g.count;
                 totalCost += g.cost;
             }
+
             var avg = totalCost / totalCount;
+            lines.push("总花费：" + totalCost + "，总人数：" + totalCount + "， 人均：" + avg);
 
             var inList = [];
             var outList = [];
@@ -113,44 +143,31 @@
             outList.sort(function (a, b) {
                 return a.money < b.money;
             })
-            console.log("avg", avg);
-            console.log("inlist", inList);
-            console.log("outList", outList);
+            // console.log("avg", avg);
+            // console.log("inlist", inList);
+            // console.log("outList", outList);
 
-            var lines = [];
             var inId = 0, outId = 0;
             while (inId < inList.length && outId < outList.length) {
                 var inGroup = inList[inId];
                 var outGroup = outList[outId];
                 if (inGroup.money > outGroup.money) {
-                    lines.push(outGroup.name + "给" + inGroup.name + ":" + outGroup.money);
+                    lines.push(outGroup.name + "给" + inGroup.name + ":" + outGroup.money.toFixed(2));
                     inGroup.money -= outGroup.money;
                     outId++;
                 } else if (inGroup.money < outGroup.money) {
-                    lines.push(outGroup.name + "给" + inGroup.name + ":" + inGroup.money);
+                    lines.push(outGroup.name + "给" + inGroup.name + ":" + inGroup.money.toFixed(2));
                     outGroup.money -= inGroup.money;
                     inId++;
                 } else {
-                    lines.push(outGroup.name + "给" + inGroup.name + ":" + inGroup.money);
+                    lines.push(outGroup.name + "给" + inGroup.name + ":" + inGroup.money.toFixed(2));
                     inId++;
                     outId++;
                 }
             }
-
             $("#result").html(lines.join("<br/>"));
             console.log(lines);
         }
-
-
-        // var list = [];
-        // list.push(new Group('A', 2, 450));
-        // list.push(new Group('B', 1, 0));
-        // list.push(new Group('C', 3, 200));
-        // list.push(new Group('D', 1, 18));
-        // list.push(new Group('E', 1, 118));
-        // AA(list);
-
-
     </script>
 </body>
 
